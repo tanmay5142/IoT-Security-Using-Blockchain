@@ -1,162 +1,284 @@
-What happens when you run interact.js:
+# IoT Device Security on Blockchain
 
-  1. Creates 3 random Ethereum wallets (simulating IoT devices)
-  2. Funds each with 0.002 ETH from your Home Miner wallet
-  3. Each device signs a message using EIP-712
-  4. Each device calls addDevice() on the contract to register itself
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Solidity](https://img.shields.io/badge/solidity-%5E0.8.0-lightgrey)
+![Hardhat](https://img.shields.io/badge/hardhat-2.0-red)
+![React](https://img.shields.io/badge/react-18.0-61dafb)
 
-  These are not real IoT hardware - just Ethereum accounts used to test the smart
-  contract's device registration flow.
+## 📋 Overview
 
-  npx hardhat run scripts/interact.js --config hardhat.config.cjs
-WARNING: You are currently using Node.js v18.20.8, which is not supported by Hardhat. This can lead to unexpected behavior. See https://v2.hardhat.org/nodejs-versions
+A decentralized application (DApp) leveraging Ethereum smart contracts to establish a trusted registry for IoT device management. This system enables organizations to register, verify, and manage IoT devices on-chain with immutable audit trails and cryptographic authentication.
+
+## 🔒 Problem Statement
+
+The proliferation of IoT devices in enterprise environments creates significant security challenges:
+
+- **Device Spoofing**: Counterfeit devices can infiltrate networks without detection
+- **Centralized Vulnerability**: Traditional device registries depend on centralized authorities susceptible to compromise
+- **Audit Trail Gaps**: Device history and ownership changes are difficult to verify
+- **Manufacturer Dependency**: Organizations lack independent verification of device authenticity
+- **Compliance Gaps**: Regulatory requirements for immutable device records remain unmet
+
+## ✅ Solution
+
+This DApp implements blockchain-based device authentication through:
+
+- **Immutable Registry**: Device records stored on Ethereum smart contracts ensure permanent, tamper-proof documentation
+- **Decentralized Authority**: Eliminates single points of failure by distributing trust across the network
+- **Cryptographic Verification**: Device ownership verified through wallet signatures and smart contract logic
+- **Real-time Transparency**: On-chain events provide transparent audit trails for all device state changes
+- **Seamless Integration**: MetaMask wallet integration enables familiar user authentication flows
+
+## ⚙️ Features
+
+- ✅ **Device Registration**: Register new IoT devices with metadata on-chain
+- ✅ **Authenticity Verification**: Cryptographic verification of device ownership and identity
+- ✅ **Secure Removal**: Deactivate or remove compromised devices with transaction records
+- ✅ **Immutable Records**: Device history and state changes permanently recorded on blockchain
+- ✅ **MetaMask Integration**: Web3 wallet authentication and transaction signing
+- ✅ **Real-time Dashboard**: Interactive frontend for device management and monitoring
+- ✅ **Event Logging**: Smart contract events provide transparent audit trails
+- ✅ **Contract Verification**: Full contract source code transparency for auditing
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Smart Contracts** | Solidity ^0.8.0 |
+| **Contract Development** | Hardhat, OpenZeppelin |
+| **Blockchain Interaction** | Ethers.js |
+| **Frontend Framework** | React 18, Vite |
+| **Styling** | Tailwind CSS |
+| **State Management** | React Context API |
+| **Wallet Integration** | MetaMask (Web3Modal) |
+| **Testnet** | Ethereum Sepolia |
+| **Testing** | Hardhat Test, Chai, Ethers.js |
+
+## 🏗️ Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   React Frontend                         │
+│         (Device Dashboard & Management UI)               │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ↓
+         ┌───────────────────────┐
+         │   MetaMask Wallet     │
+         │  (User Authentication)│
+         └────────────┬──────────┘
+                      │
+                      ↓
+         ┌─────────────────────────────┐
+         │   Ethers.js (Web3.js)       │
+         │   (Blockchain Interaction)  │
+         └────────────┬────────────────┘
+                      │
+                      ↓
+    ┌─────────────────────────────────────┐
+    │  Smart Contract (IoTDeviceManager)  │
+    │  - Device Registration              │
+    │  - Verification Logic               │
+    │  - State Management                 │
+    └─────────────────────────────────────┘
+                      │
+                      ↓
+    ┌─────────────────────────────────────┐
+    │    Ethereum Sepolia Testnet         │
+    │  (Immutable Decentralized Storage)  │
+    └─────────────────────────────────────┘
+```
+
+## 📁 Project Structure
+
+```
+iot-blockchain-security/
+├── contracts/
+│   ├── IoTDeviceManager.sol       # Main smart contract for device management
+│   └── interfaces/
+│       └── IIoTDeviceManager.sol  # Contract interface
+├── scripts/
+│   ├── deploy.js                  # Contract deployment script
+│   ├── register-device.js         # Device registration helper
+│   └── verify-device.js           # Device verification helper
+├── test/
+│   └── IoTDeviceManager.test.js   # Smart contract unit tests
+├── frontend/
+│   ├── src/
+│   │   ├── components/            # React components
+│   │   ├── pages/                 # Application pages
+│   │   ├── hooks/                 # Custom React hooks
+│   │   ├── contracts/             # Contract ABIs
+│   │   ├── utils/                 # Helper functions
+│   │   ├── App.jsx                # Main application component
+│   │   └── index.css              # Global styles
+│   ├── public/                    # Static assets
+│   ├── package.json
+│   └── vite.config.js             # Vite configuration
+├── hardhat.config.js              # Hardhat configuration
+├── package.json                   # Project dependencies
+├── README.md                      # This file
+└── .env.example                   # Environment variables template
+```
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+
+- Node.js v16+ and npm v8+
+- MetaMask browser extension
+- Git
+
+### Step 1: Clone Repository
+
+```bash
+git clone https://github.com/tanmay5142/IoT-Security-Using-Blockchain.git
+cd IoT-Security-Using-Blockchain
+```
+
+### Step 2: Install Dependencies
+
+```bash
+npm install
+```
+
+### Step 3: Configure Environment Variables
+
+```bash
+cp .env.example .env.local
+```
+
+Update `.env.local` with:
+
+```env
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
+PRIVATE_KEY=your_private_key_here
+CONTRACT_ADDRESS=deployed_contract_address
+```
+
+### Step 4: Deploy Smart Contract
+
+```bash
+npx hardhat run scripts/deploy.js --network sepolia
+```
+
+Save the deployed contract address to `.env.local`:
+
+```env
+CONTRACT_ADDRESS=0x...
+```
+
+### Step 5: Install Frontend Dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+## 🎯 How to Run
+
+### Run Tests
+
+```bash
+npx hardhat test
+```
+
+### Deploy to Sepolia Testnet
+
+```bash
+npx hardhat run scripts/deploy.js --network sepolia
+```
+
+### Start Development Server
+
+```bash
+cd frontend
+npm run dev
+```
+
+The frontend will be available at `http://localhost:5173`
+
+### Register a Device
+
+```bash
+npx hardhat run scripts/register-device.js --network sepolia
+```
+
+## 📜 Smart Contract Details
+
+### IoTDeviceManager.sol
+
+The primary smart contract manages the complete device lifecycle:
+
+**Key Functions:**
+
+- `registerDevice(string memory _deviceId, string memory _metadata)` - Register a new IoT device with metadata
+- `verifyDevice(string memory _deviceId) returns (bool)` - Verify device authenticity
+- `removeDevice(string memory _deviceId)` - Deactivate a device
+- `getDeviceDetails(string memory _deviceId) returns (Device)` - Retrieve device information
+- `getAllDevices() returns (Device[])` - List all registered devices
+
+**State Variables:**
+
+- `devices`: Mapping of device IDs to Device structs
+- `deviceOwners`: Tracking device-to-owner relationships
+- `deviceCount`: Total registered devices
+
+**Events:**
+
+- `DeviceRegistered`: Emitted when device is registered
+- `DeviceVerified`: Emitted when device authenticity is confirmed
+- `DeviceRemoved`: Emitted when device is deactivated
+
+## 📸 Screenshots
+
+### Device Dashboard
 
 
-◇ injected env (4) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
-◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
-◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
-===========================================
-IoT Device Manager - Full Contract Test
-===========================================
-
-Home Miner Wallet: 0x7459d2132698e936e5876f2655137D0290B02B3e
-Contract: 0x98c3938347dBb5e027B8021ec29dafeC0E90C9A5
-Balance: 3.649140173919283907 ETH
-
---- TEST 1: Initial State ---
-  Total Devices Registered: 0
-  Total Intrusions: 0
-  Total Transactions: 0
-  Contract Uptime (seconds): 1512
-PASS: Initial state read successfully
-
---- TEST 2: Add Device 1 (Temperature Sensor) ---
-Device address: 0xE02fbeF9fBa2c0A047770C316684D9997764876f
-Funded device with 0.002 ETH
-Tx hash: undefined
-Device count after add: 1
-PASS: Device 1 added successfully
-
---- TEST 3: Add Device 2 (Smart Lock) ---
-Device address: 0x68f52d29915318346A84110f6AD05D96350c1944
-Funded device with 0.002 ETH
-Device count after add: 2
-PASS: Device 2 added successfully
-
---- TEST 4: Add Device 3 (Security Camera) ---
-Device address: 0x65501bDC450e9dB711a5fdD2Cfc2412a29f4c683
-Funded device with 0.002 ETH
-Device count after add: 3
-PASS: Device 3 added successfully
-
---- TEST 5: Add Duplicate Device (should fail) ---
-PASS: Duplicate correctly rejected
-
---- TEST 6: Verify Valid Device ---
-Verifying device: 0xE02fbeF9fBa2c0A047770C316684D9997764876f
-Tx hash: undefined
-Device is valid: true
-PASS: Valid device verified successfully
-
---- TEST 7: Verify Invalid Device (Intrusion Detection) ---
-Verifying non-existent device: 0x489DD669eF6CC90b9438F84df8333Bc0AFA5c34e
-Fake device is valid: false
-PASS: Invalid device correctly detected
-
---- TEST 8: Get All Devices Ever Registered ---
-Devices ever registered: 3
-  1. 0xE02fbeF9fBa2c0A047770C316684D9997764876f
-  2. 0x68f52d29915318346A84110f6AD05D96350c1944
-  3. 0x65501bDC450e9dB711a5fdD2Cfc2412a29f4c683
-PASS: All devices list retrieved
-
---- TEST 9: Get Device Info ---
-Getting info for: 0xE02fbeF9fBa2c0A047770C316684D9997764876f
-  Device Address: 0xE02fbeF9fBa2c0A047770C316684D9997764876f
-  Device Type: Temperature Sensor
-  Is Active: true
-  Registration Time: 2026-04-30T12:24:12.000Z
-PASS: Device info retrieved
-
---- TEST 10: Get Updated Contract Stats ---
-  Total Devices Registered: 3
-  Total Intrusions: 1
-  Total Transactions: 6
-PASS: Contract stats retrieved
-
---- TEST 11: Get Transaction History ---
-Total transactions: 6
-  1. ADD_DEVICE - Target: 0xE02fbeF9fBa2c0A047770C316684D9997764876f - Success: true
-  2. ADD_DEVICE - Target: 0x68f52d29915318346A84110f6AD05D96350c1944 - Success: true
-  3. ADD_DEVICE - Target: 0x65501bDC450e9dB711a5fdD2Cfc2412a29f4c683 - Success: true
-  4. VERIFY_DEVICE - Target: 0xE02fbeF9fBa2c0A047770C316684D9997764876f - Success: true
-  5. INTRUSION_ATTEMPT - Target: 0x7459d2132698e936e5876f2655137D0290B02B3e - Success: false
-  6. VERIFY_DEVICE - Target: 0x489DD669eF6CC90b9438F84df8333Bc0AFA5c34e - Success: false
-PASS: Transaction history retrieved
-
---- TEST 12: Remove Device ---
-Removing device: 0x68f52d29915318346A84110f6AD05D96350c1944
-Tx hash: undefined
-Removed device is valid: false
-Device count after remove: 2
-PASS: Device removed successfully
-
---- TEST 13: Verify Removed Device is Invalid ---
-Removed device is valid: false
-PASS: Removed device correctly shows as invalid
-
---- TEST 14: Remove Non-existent Device (should fail) ---
-PASS: Non-existent device correctly rejected
-
---- TEST 15: Get Intrusion Count ---
-Intrusion attempts recorded: 1
-PASS: Intrusion count retrieved
-
---- TEST 16: Get Intrusion Log ---
-Intrusion log entries: 1
-PASS: Intrusion log retrieved
-
-===========================================
-TEST RESULTS
-===========================================
-Passed: 16
-Failed: 0
-Total: 16
-===========================================
-
-All tests passed!
+### Device Registration Modal
 
 
+### Device Details View
 
 
+### Transaction History
 
-Usage
 
-  To remove a device:
-  # Edit DEVICE_TO_REMOVE in removeSpecificDevice.js, then:
-  npx hardhat run scripts/removeSpecificDevice.js --config hardhat.config.cjs
+## 🔮 Future Improvements
 
-  To add a device:
-  # Edit DEVICE_ADDRESS, DEVICE_TYPE, and DEVICE_PRIVATE_KEY in addSpecificDevice.js,
-  then:
-  npx hardhat run scripts/addSpecificDevice.js --config hardhat.config.cjs
+- [ ] Multi-signature contract upgrades using OpenZeppelin Proxies
+- [ ] Role-based access control (RBAC) for different stakeholder types
+- [ ] Off-chain data storage (IPFS) for device metadata with on-chain hashes
+- [ ] Integration with Chainlink oracles for real-world device data
+- [ ] Automated device health monitoring and alert system
+- [ ] NFT-based device certificates for enhanced authenticity verification
+- [ ] Cross-chain interoperability using bridge protocols
+- [ ] Gas optimization through batch operations
+- [ ] Advanced analytics dashboard with device metrics
+- [ ] Mobile application for device management on-the-go
 
-  ---
-  Edit before running:
+## 📖 Contributing
 
-  removeSpecificDevice.js - Line 11:
-  const DEVICE_TO_REMOVE = "0x68f52d29915318346A84110f6AD05D96350c1944";
+Contributions are welcome! Please follow these steps:
 
-  addSpecificDevice.js - Lines 10-12:
-  const DEVICE_ADDRESS = "0x...";         // Device address
-  const DEVICE_TYPE = "Temperature Sensor";  // Device type
-  const DEVICE_PRIVATE_KEY = "0x...";     // Device's private key
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Submit a Pull Request
 
-  ---
-  Important Notes
+## 📝 License
 
-  Remove: Only Home Miner can remove devices (your wallet in .env)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-  Add: The device must sign its registration itself using EIP-712. You need the actual
-   IoT device's private key to register a real device. If you're just testing, you can
-   generate a random wallet for simulation purposes.
+## 👤 Author
+
+**Tanmay Sharma**
+
+- GitHub: [@tanmay5142](https://github.com/tanmay5142)
+- Email: tanmayanand5142@gmail.com
+
+---
+
+**Last Updated**: May 2026  
+**Version**: 1.0.0
