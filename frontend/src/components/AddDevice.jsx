@@ -36,25 +36,28 @@ const AddDevice = () => {
       const contract = getContract(signer);
 
       const nonce = await contract.nonces(deviceAddress);
-      const domainSeparator = await contract.domainSeparator();
+      const { chainId } = await provider.getNetwork();
 
-      const addDeviceTypeHash = ethers.utils.keccak256(
-        ethers.utils.toUtf8Bytes('AddDevice(address device,string deviceType,uint256 nonce)')
+      const signature = await signer._signTypedData(
+        {
+          name: 'IoTDeviceManager',
+          version: '1',
+          chainId,
+          verifyingContract: contract.address,
+        },
+        {
+          AddDevice: [
+            { name: 'device', type: 'address' },
+            { name: 'deviceType', type: 'string' },
+            { name: 'nonce', type: 'uint256' },
+          ],
+        },
+        {
+          device: deviceAddress,
+          deviceType,
+          nonce,
+        }
       );
-
-      const messageHash = ethers.utils.keccak256(
-        ethers.utils.defaultAbiCoder.encode(
-          ['bytes32', 'address', 'bytes32', 'uint256'],
-          [addDeviceTypeHash, deviceAddress, ethers.utils.keccak256(ethers.utils.toUtf8Bytes(deviceType)), nonce]
-        )
-      );
-
-      const ethSignedHash = ethers.utils.solidityKeccak256(
-        ['bytes1', 'bytes1', 'bytes32', 'bytes32'],
-        ['\x19', '\x01', domainSeparator, messageHash]
-      );
-
-      const signature = await signer.signMessage(ethers.utils.arrayify(ethSignedHash));
 
       const tx = await contract.addDevice(deviceAddress, deviceType, signature);
       toast.loading('Transaction pending...');

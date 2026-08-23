@@ -18,10 +18,10 @@ async function main() {
 
   const fundTx = await homeMinerWallet.sendTransaction({
     to: device1.address,
-    value: ethers.utils.parseEther("0.002")
+    value: ethers.utils.parseEther("0.1")
   });
   await fundTx.wait();
-  console.log("Funded device with 0.002 ETH");
+  console.log("Funded device with 0.1 ETH");
 
   // Get signature values
   const domainSep = await contract.domainSeparator();

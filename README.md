@@ -204,6 +204,9 @@ The frontend will be available at `http://localhost:5173`
 npx hardhat run scripts/register-device.js --network sepolia
 ```
 
+### Check Devices
+npm run check-devices
+
 ## 📜 Smart Contract Details
 
 ### IoTDeviceManager.sol
@@ -273,7 +276,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Tanmay Sharma**
+**Tanmay**
 
 - GitHub: [@tanmay5142](https://github.com/tanmay5142)
 - Email: tanmayanand5142@gmail.com
